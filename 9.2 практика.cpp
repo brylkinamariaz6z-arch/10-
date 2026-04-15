@@ -293,34 +293,25 @@ void loadFlightsFromBinary(const char* filename, Flight flights[], int n) {
 
 int main() {
     setlocale(LC_ALL, "Russian");
-
-    // 1. Инициализация исходного массива
+    
     Flight* flights = initFlights();
-
-    // 2. Вывод всех рейсов
+    //Вывод всех рейсов
     printAllFlights(flights, SIZE, "ИСХОДНЫЙ МАССИВ (20 РЕЙСОВ)");
-
-    // 3. Фильтрация: пункт назначения оканчивается на "град" и тип транзитный
+    //Фильтрация: пункт назначения оканчивается на "град" и тип транзитный
     Flight gradTransit[SIZE];
     int gradCount = filterFlights(flights, SIZE, gradTransit, isGradAndTransit);
     printAllFlights(gradTransit, gradCount, "РЕЙСЫ С ОКОНЧАНИЕМ \"град\" И ТИПОМ \"ТРАНЗИТ\"");
-
-    // 4. Сортировка отфильтрованного массива по времени полёта (пузырёк)
+    //Сортировка отфильтрованного массива по времени полёта (пузырёк)
     bubbleSortFlights(gradTransit, gradCount, compareByFlightTime);
     printAllFlights(gradTransit, gradCount, "ОТСОРТИРОВАНО ПО ВРЕМЕНИ ПОЛЁТА (возрастание)");
-
-    // 5. Поиск конкретного рейса по пункту назначения
+    //Поиск конкретного рейса по пункту назначения
     findFlightByDestination(flights, SIZE, "Калининград");
     findFlightByDestination(flights, SIZE, "Лондон");   // несуществующий
-
-    // 6. Вывод 5 чартерных рейсов, вылетающих ночью
     print5NightCharter(flights, SIZE);
-
-    // 7. Изменение рейса (например, для "Москва")
+    //Изменение рейса (например, для "Москва")
     modifyFlight(flights, SIZE, "Москва", 6999.99, 140);
     findFlightByDestination(flights, SIZE, "Москва"); // проверка
-
-    // 8. Фильтрация стыковочных рейсов со стоимостью менее N (N = 10000)
+    //Фильтрация стыковочных рейсов со стоимостью менее N (N = 10000)
     Flight cheapLayover[SIZE];
     const double maxPrice = 10000.0;
     int cheapCount = 0;
@@ -330,19 +321,16 @@ int main() {
         }
     }
     showFiltered(cheapLayover, cheapCount, "СТЫКОВОЧНЫЕ РЕЙСЫ ДЕШЕВЛЕ 10000 РУБ");
-
     cout << "\n=================== РАБОТА С ТЕКСТОВЫМ ФАЙЛОМ ===================\n";
-    // 9. Создание текстового файла с ценами
+    //Создание текстового файла с ценами
     writePricesToTextFile("prices.txt");
-    // 10. Чтение из файла и обновление цен
-    readAndUpdatePrices(flights, SIZE, "prices.txt");
-    // Вывод обновлённого массива
-    printAllFlights(flights, SIZE, "ПОСЛЕ ОБНОВЛЕНИЯ ЦЕН ИЗ ТЕКСТОВОГО ФАЙЛА");
 
+    readAndUpdatePrices(flights, SIZE, "prices.txt");
+    printAllFlights(flights, SIZE, "ПОСЛЕ ОБНОВЛЕНИЯ ЦЕН ИЗ ТЕКСТОВОГО ФАЙЛА");
     cout << "\n=================== РАБОТА С БИНАРНЫМ ФАЙЛОМ ===================\n";
-    // 11. Запись в бинарный файл
+    //Запись в бинарный файл
     saveFlightsToBinary("flights.bin", flights, SIZE);
-    // 12. Чтение из бинарного файла в новый массив
+
     Flight* loadedFlights = new Flight[SIZE];
     loadFlightsFromBinary("flights.bin", loadedFlights, SIZE);
     // Проверка прочитанных данных
